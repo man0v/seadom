@@ -1,0 +1,36 @@
+#!/usr/bin/env python
+
+import requests
+import sys
+import json
+
+# Works with name.com api
+# Using credentials from .netrc. You can find useful example here https://www.ibm.com/support/knowledgecenter/en/ssw_aix_71/filesreference/netrc.html?origURL=ssw_aix_71/com.ibm.aix.files/netrc.htm
+
+URL = "https://api.name.com/v4/"
+FUNC = "domains:checkAvailability"
+
+def main():
+
+    src = '{"domainNames": ["' + '","'.join(sys.argv[1:]) + '"]}'
+
+    try:
+        r = requests.post(URL + FUNC, data = src)
+    except requests.exceptions.RequestException as e:
+        print(e)
+        sys.exit(1)
+
+    try:
+        res = json.loads(r.text)
+    except:
+        print("Result from name.com is not a valid json... try again later...")
+
+    for x in res['results']:
+
+        if x['purchasable']:
+            print(x['domainName'] + " is free and costs:", x['purchasePrice'])
+        else:
+            print(x['domainName'] + ' is already taken')
+
+if __name__ == "__main__":
+    main()
