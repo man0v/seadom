@@ -31,12 +31,15 @@ def main():
     except:
         print("Result from name.com is not a valid json... try again later...")
 
-    for x in res['results']:
+    if 'results' in res:
+        for x in res['results']:
 
-        if 'purchasable' in x:
-            print(x['domainName'] + " is free and costs:", x['purchasePrice'])
-        else:
-            print(x['domainName'] + ' is already taken')
+            if 'purchasable' in x:
+                print(x['domainName'] + " is free and costs:", x['purchasePrice'])
+            else:
+                print(x['domainName'] + ' is already taken')
+    else:
+        print("no result")
 
 if __name__ == "__main__":
     main()
