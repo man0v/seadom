@@ -20,6 +20,11 @@ def main():
         print(e)
         sys.exit(1)
 
+    if r.status_code != 200:
+        print("Request was not successful, error is bellow")
+        print(r.text)
+        sys.exit(1)
+
     try:
         res = json.loads(r.text)
     except:
